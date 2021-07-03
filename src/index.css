@@ -1,0 +1,18 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Space+Grotesk&display=swap');
+
+#app {
+    font-family: 'Roboto', sans-serif;
+    font-family: 'Space Grotesk', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+  }
+
+  #nav {
+    margin-bottom: 2rem;
+  }
+
+  .search {
+    margin: 0 auto;
+    width: 50%;
+  }
