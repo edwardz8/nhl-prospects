@@ -1,0 +1,5 @@
+export { default as hockey } from './hockey.jpeg'
+export { default as hockey0 } from './hockey0.jpeg'
+export { default as skates } from './skates.jpeg'
+export { default as rotorink } from './rotorink.jpeg'
+export { default as skates0 } from './hanging-skates.jpeg'

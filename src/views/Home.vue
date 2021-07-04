@@ -9,13 +9,11 @@
           <input
             type="text"
             class="form-control"
-            id="input"
             placeholder="NHL Team Search"
-            @keydown.enter="search"
           />
         </div>
         <div class="col-2">
-          <button @click="search" type="button" class="btn btn-dark">Search</button>
+          <button type="submit" value="SEARCH" class="btn btn-dark">Search</button>
         </div>
       </div>
     </div>
@@ -25,7 +23,7 @@
   <div class="grid">
     <div v-for="p of prospects" :key="p.id">
       <div class="card mx-2 my-2" style="width: 18rem">
-        <img src="../assets/hockey.jpeg" class="card-img-top" alt="..." />
+        <img :src="matchPlayer(p.primaryPosition.name)" class="card-img-top" />
         <div class="card-body">
           <h5 class="card-title">{{ p.fullName }}</h5>
           <h5 class="card-title">{{ p.primaryPosition.name }}</h5>
@@ -43,6 +41,7 @@
 
 <script>
 import { ref, onMounted } from "vue";
+import methods from '../methods'
 export default {
   setup() {
     const loading = ref(true);
@@ -67,9 +66,12 @@ export default {
 
     return {
       prospects,
-      loading,
+      loading
     };
   },
+  methods: {
+    ...methods
+  }
 };
 </script>
 
