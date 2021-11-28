@@ -1,62 +1,54 @@
 <template>
   <div class="container-fluid list">
-    <div class="row mb-2 g-3">
-      <h4 class="text-center">Hockey Prospect Finder</h4>
-    </div>
-    <div class="search">
-      <div class="container-fluid row mb-3 g-3">
-        <div class="col-10">
-          <input
-            type="text"
-            class="form-control"
-            placeholder="NHL Team Search"
-          />
-        </div>
-        <div class="col-2">
-          <button type="submit" value="SEARCH" class="btn btn-dark">Search</button>
-        </div>
-      </div>
-    </div>
+    <Search />
 
-    <p class="text-center" v-if="loading">Loading Prospects...</p>
+    <p class="text-center" v-if="state.loading">Loading Prospects...</p>
 
-  <div class="grid">
-    <div v-for="p of prospects" :key="p.id">
-      <div class="card mx-2 my-2" style="width: 18rem">
-        <img :src="matchPlayer(p.primaryPosition.name)" class="card-img-top" />
-        <div class="card-body">
-          <h5 class="card-title">{{ p.fullName }}</h5>
-          <h5 class="card-title">{{ p.primaryPosition.name }}</h5>
-          <p class="card-text">{{ p.amateurTeam.name }}</p>
-          <p class="card-text">Ranking: {{ p.ranks.finalRank }} - {{ p.ranks.draftYear }}</p>
-          <p class="card-text">{{ p.height }} - {{ p.weight }} - {{ p.shootsCatches }}</p>
-          <a class="btn btn-primary">Info</a>
-        </div>
-      </div>
+    <div class="grid">
+      <card
+        v-for="p of prospects"
+        :key="p.id"
+        :fullName="p.fullName"
+        :amateurTeamName="p.amateurTeam.name"
+        :positionName="p.primaryPosition.name"
+        :finalRank="p.ranks.finalRank"
+        :draftYear="p.ranks.draftYear"
+        :height="p.height"
+        :weight="p.weight"
+        :handiness="p.shootsCatches"
+      />
     </div>
-    </div>
-
   </div>
 </template>
 
 <script>
-import { ref, onMounted } from "vue";
-import methods from '../methods'
+import { ref, onMounted, computed } from "vue";
+import methods from "../methods";
+import Search from "../components/Search.vue";
+import Card from "../components/Card.vue";
+import { useProspectApi } from "../hooks/nhl-api";
+
 export default {
+  components: { Search, Card },
   setup() {
-    const loading = ref(true);
-    const prospects = ref(null);
+    const prospects = ref([]);
+    const state = useProspectApi();
+    const searchQuery = ref("");
+
+    const searchedProspects = computed(() => {
+      return state.prospects.filter((p) => {
+        return p.fullName.toLowerCase().indexOf(searchQuery.value.toLowerCase()) != -1;
+      });
+    });
 
     function fetchData() {
-      loading.value = true;
       return fetch("https://statsapi.web.nhl.com/api/v1/draft/prospects")
         .then((res) => res.json())
         .then((data) => {
           console.log({ data });
+          state.loading = true;
           prospects.value = data.prospects.splice(0, 10);
-        })
-        .then(() => {
-          loading.value = false;
+          state.loading = false;
         });
     }
 
@@ -66,12 +58,14 @@ export default {
 
     return {
       prospects,
-      loading
+      state,
+      searchQuery,
+      searchedProspects,
     };
   },
   methods: {
-    ...methods
-  }
+    ...methods,
+  },
 };
 </script>
 

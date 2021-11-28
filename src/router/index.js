@@ -19,7 +19,7 @@ const router = createRouter({
             path: '/players',
             component: () => import('../views/Players.vue')
         },
-        {
+        /* {
             path: "/player/:id",
             name: "PlayerDetails",
             props: (route) => {
@@ -28,7 +28,7 @@ const router = createRouter({
               };
             },
             component: () => import('../views/PlayerDetails.vue')
-          },
+          }, */
     ]
 })
 
